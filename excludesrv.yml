@@ -1,0 +1,20 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+  - name: Read the content of the file
+    slurp:
+      src: C:\tmp\Auto_Shutdown_Weekend_Exclusion_List.csv
+    register: file_content
+    tags: o
+
+  - name: Check if {{ server }} exists in the file
+    set_fact:
+      exclude_found: "{{ server in (file_content['content'] | b64decode | string) }}"
+
+  - name: Adding the {{ server }} into exclusion list
+    community.windows.win_lineinfile:
+      path: C:\tmp\Auto_Shutdown_Weekend_Exclusion_List.csv
+      line: "{{ item }};{{ ticket }};{{ descr }},,"
+    when: not exclude_found
+    loop: "{{ server | default([]) }}"
