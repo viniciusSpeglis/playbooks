@@ -4,7 +4,7 @@
   tasks:
   - name: Read the content of the file
     slurp:
-      src: C:\tmp\Auto_Shutdown_Weekend_Exclusion_List.csv
+      src: C:\Auto_Shutdown_Weekend_Exclusion_List.csv
     register: file_content
     tags: o
 
@@ -14,7 +14,7 @@
 
   - name: Adding the {{ server }} into exclusion list
     community.windows.win_lineinfile:
-      path: C:\tmp\Auto_Shutdown_Weekend_Exclusion_List.csv
+      path: C:\Auto_Shutdown_Weekend_Exclusion_List.csv
       line: "{{ item }};{{ ticket }};{{ descr }},,"
     when: not exclude_found
     loop: "{{ server | default([]) }}"
