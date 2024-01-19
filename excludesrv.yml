@@ -17,4 +17,4 @@
       path: C:\Auto_Shutdown_Weekend_Exclusion_List.csv
       line: "{{ item }};{{ ticket }};{{ descr }}."
     when: not exclude_found
-    loop: "{{ server.split(",") }}"
+    loop: "{{ server.split(',') }}"
