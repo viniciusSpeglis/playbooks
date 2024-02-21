@@ -24,8 +24,8 @@
         validate_certs: no  
         name: "{{ item }}"
         attributes:
-          - name: IntegrationCo
-            value: true
+          - name: Company
+            value: IntegrationCo
       loop: "{{ server.split(',') }}"
 
     - name:  Changing network adapter
