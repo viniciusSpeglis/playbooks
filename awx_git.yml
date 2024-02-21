@@ -1,0 +1,26 @@
+---
+- name: Create AWX Inventory, Project, and Job Template
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Create Inventory
+      awx.awx.inventory:
+        name: "My Inventory"
+        description: "Some description"
+      register: inventory_result
+
+    - name: Create Project
+      awx.awx.project:
+        name: "First Project"
+        scm_url: "https://your.git.url/repo.git"
+        scm_type: "git"
+      register: project_result
+
+    - name: Create Job Template
+      awx.awx.job_template:
+        name: "Your Job Template Name"
+        project: "{{ project_result.id }}"
+        job_type: "run"
+        inventory: "{{ inventory_result.id }}"
+        playbook: "hello-world.yml"
+      register: job_template_result
