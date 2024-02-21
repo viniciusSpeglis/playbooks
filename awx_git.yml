@@ -3,11 +3,11 @@
   hosts: localhost
   gather_facts: false
   tasks:
-    - name: Create Inventory
-      awx.awx.inventory:
-        name: "My Inventory"
-        description: "Some description"
-      register: inventory_result
+#    - name: Create Inventory
+ #     awx.awx.inventory:
+  #      name: "My Inventory"
+   #     description: "Some description"
+    #  register: inventory_result
 
     - name: Create Project
       awx.awx.project:
