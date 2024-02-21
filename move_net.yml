@@ -16,15 +16,6 @@
         var: item.virtual_machines[0].mac_address[0]
       loop: "{{ vm_info.results }}"
 
-
-
-
-    - name: DEBUG NET2
-      debug:
-        msg: "Cluster: {{ vm_info.virtual_machines[0].cluster }}, MAC: {{ vm_info.virtual_machines[0].mac_address[0] }}"
-      loop: "{{ server.split(',') }}"
-
-
     - name: Powering off "{{ item }}"
       community.vmware.vmware_guest_powerstate:
         validate_certs: no
