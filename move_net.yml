@@ -13,8 +13,8 @@
 
     - name: DEBUG NET2
       debug:
-        msg: "Cluster: {{ item.cluster }}, MAC: {{ item.mac_address[0] }}"
-      loop: "{{ vm_info.virtual_machines }}"
+        msg: "Cluster: {{ vm_info.virtual_machines[0].cluster }}, MAC: {{ vm_info.virtual_machines[0].mac_address[0] }}"
+      loop: "{{ server.split(',') }}"
 
 
     - name: Powering off "{{ item }}"
