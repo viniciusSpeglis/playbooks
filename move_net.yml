@@ -11,6 +11,11 @@
       loop: "{{ server.split(',') }}"
       register: vm_info
 
+    - name: Debug VM Info Before Changing network adapter
+      debug:
+        var: vm_info
+
+
     - name: Powering off "{{ item }}"
       community.vmware.vmware_guest_powerstate:
         validate_certs: no
