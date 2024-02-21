@@ -11,10 +11,11 @@
       register: vm_info
       loop: "{{ server.split(',') }}"
 
-    - name: Print MAC Address
+    - name: Print MAC Addresses
       debug:
-        var: vm_info.results[0].virtual_machines[0].mac_address[0]
+        var: item.virtual_machines[0].mac_address[0]
       loop: "{{ vm_info.results }}"
+
 
 
 
