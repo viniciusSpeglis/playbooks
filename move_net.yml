@@ -11,19 +11,13 @@
       register: vm_info
       loop: "{{ server.split(',') }}"
 
-    - name: Debug VM Info Before Changing network adapter
-      debug:
-        var: vm_info
-
-
     - name: Powering off "{{ item }}"
       community.vmware.vmware_guest_powerstate:
         validate_certs: no
         name: "{{ item }}"
         state: powered-off
       loop: "{{ server.split(',') }}"
-      delegate_to: localhost
-
+      
     - name: Custom tags
       community.vmware.vmware_guest_custom_attributes:
         validate_certs: no  
@@ -32,12 +26,6 @@
           - name: Company
             value: IntegrationCo
       loop: "{{ server.split(',') }}"
-
-    - name: DEBUG Changing network adapter
-      debug:
-        msg: "Cluster: {{ vm_info.virtual_machines[0].cluster }}, MAC: {{ vm_info.virtual_machines[0].mac_address[0] }}"
-      loop: "{{ server.split(',') }}"
-
 
     - name:  Changing network adapter
       community.vmware.vmware_guest_network:
