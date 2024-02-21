@@ -13,7 +13,7 @@
 
     - name: Print MAC Address
       debug:
-        var: item.virtual_machines[0].mac_address[0]
+        msg: Aqui o item: "{{ item.virtual_machines[0].mac_address[0] }}"
       loop: "{{ vm_info.results }}"
 
 
