@@ -34,16 +34,17 @@
             value: IntegrationCo
       loop: "{{ server.split(',') }}"
 
-    - name:  Changing network adapter
+    - name: Changing network adapter
       community.vmware.vmware_guest_network:
         datacenter: 'US-CoreSite'
-        cluster: '"{{ vm_info.virtual_machines[0].cluster }}"'
+        cluster: "{{ vm_info.results[0].virtual_machines[0].cluster }}"
         validate_certs: no
         name: "{{ item }}"
-        mac_address: "{{ vm_info.virtual_machines[0].mac_address[0] }}"
+        mac_address: "{{ vm_info.results[0].virtual_machines[0].mac_address[0] }}"
         network_name: 'VLAN 1000'
         state: present
       loop: "{{ server.split(',') }}"
+
 
     - name: Powering on "{{ item }}"
       community.vmware.vmware_guest_powerstate:
