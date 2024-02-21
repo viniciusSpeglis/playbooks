@@ -8,6 +8,8 @@
       community.vmware.vmware_vm_info:
         validate_certs: no
         vm_name: "{{ item }}"
+        vm_type: vm 
+        show_mac_address: true
       register: vm_info
       loop: "{{ server.split(',') }}"
 
