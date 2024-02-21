@@ -13,8 +13,9 @@
 
     - name: DEBUG NET
       debug:
-        msg: "Cluster: {{ vm_info.virtual_machines[0].cluster }}, MAC: {{ vm_info.virtual_machines[0].mac_address[0] }}"
-      loop: "{{ server.split(',') }}"
+        msg: "Cluster: {{ item.cluster }}, MAC: {{ item.mac_address[0] }}"
+      loop: "{{ vm_info.virtual_machines }}"
+
 
     - name: Powering off "{{ item }}"
       community.vmware.vmware_guest_powerstate:
