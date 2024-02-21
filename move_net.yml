@@ -28,6 +28,12 @@
             value: IntegrationCo
       loop: "{{ server.split(',') }}"
 
+    - name: Changing network adapter
+      debug:
+        msg: "Cluster: {{ vm_info.virtual_machines[0].cluster }}, MAC: {{ vm_info.virtual_machines[0].mac_address[0] }}"
+      loop: "{{ server.split(',') }}"
+
+
     - name:  Changing network adapter
       community.vmware.vmware_guest_network:
         datacenter: 'US-CoreSite'
