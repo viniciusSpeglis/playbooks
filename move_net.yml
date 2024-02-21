@@ -11,6 +11,11 @@
       register: vm_info
       loop: "{{ server.split(',') }}"
 
+    - name: DEBUG NET
+      debug:
+        msg: "Cluster: {{ vm_info.virtual_machines[0].cluster }}, MAC: {{ vm_info.virtual_machines[0].mac_address[0] }}"
+      loop: "{{ server.split(',') }}"
+
     - name: Powering off "{{ item }}"
       community.vmware.vmware_guest_powerstate:
         validate_certs: no
