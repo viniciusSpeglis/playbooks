@@ -11,7 +11,7 @@
       register: vm_info
       loop: "{{ server.split(',') }}"
 
-    - name: DEBUG NET
+    - name: DEBUG NET2
       debug:
         msg: "Cluster: {{ item.cluster }}, MAC: {{ item.mac_address[0] }}"
       loop: "{{ vm_info.virtual_machines }}"
