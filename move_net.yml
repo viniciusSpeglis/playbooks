@@ -28,7 +28,7 @@
             value: IntegrationCo
       loop: "{{ server.split(',') }}"
 
-    - name: Changing network adapter
+    - name: DEBUG Changing network adapter
       debug:
         msg: "Cluster: {{ vm_info.virtual_machines[0].cluster }}, MAC: {{ vm_info.virtual_machines[0].mac_address[0] }}"
       loop: "{{ server.split(',') }}"
