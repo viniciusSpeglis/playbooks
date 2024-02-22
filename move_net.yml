@@ -39,7 +39,7 @@
         validate_certs: no
         name: "{{ item }}"
         mac_address: "{{ vm_info.results[0].virtual_machines[0].mac_address[0] }}"
-        network_name: 'VLAN 1000'
+        network_name: "{{ vlan }}"
         state: present
       loop: "{{ server.split(',') }}"
 
