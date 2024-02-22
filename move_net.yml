@@ -29,12 +29,12 @@
 
     - name: Changing network adapter
       community.vmware.vmware_guest_network:
-        datacenter: "{{ datacenter }}"
+        datacenter: vadvc01.eur.ad.sag
         cluster: "{{ vm_info.results[0].virtual_machines[0].cluster }}"
         validate_certs: no
         name: "{{ item }}"
         mac_address: "{{ vm_info.results[0].virtual_machines[0].mac_address[0] }}"
-        network_name: "{{ vlan }}"
+        network_name: 'VLAN 1000'
         state: present
       loop: "{{ server.split(',') }}"
 
