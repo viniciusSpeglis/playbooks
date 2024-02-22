@@ -11,11 +11,6 @@
       register: vm_info
       loop: "{{ server.split(',') }}"
 
-    - name: Print MAC Addresses
-      debug:
-        msg: "{{ item.virtual_machines[0].mac_address[0] }}"
-      loop: "{{ vm_info.results }}"
-
     - name: Powering off "{{ item }}"
       community.vmware.vmware_guest_powerstate:
         validate_certs: no
