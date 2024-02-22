@@ -29,7 +29,7 @@
 
     - name: Changing network adapter
       community.vmware.vmware_guest_network:
-        datacenter: 'US-CoreSite'
+        datacenter: "{{ datacenter }}"
         cluster: "{{ vm_info.results[0].virtual_machines[0].cluster }}"
         validate_certs: no
         name: "{{ item }}"
