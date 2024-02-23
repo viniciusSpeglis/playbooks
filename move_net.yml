@@ -12,13 +12,12 @@
       loop: "{{ server.split(',') }}"
 
     - name: Debug vars
-      debug:  
-          msg:
-            var1: "{{ item.1.cluster }}"
-            var2: "{{ item.1.guest_name }}"
-            var3: "{{ item.1.mac_address[0] }}"
-          with_items:
-            - "{{ vm_info.results | subelements('virtual_machines') }}"
+      debug:
+        msg:
+          var1: "{{ item.1.cluster }}"
+          var2: "{{ item.1.guest_name }}"
+          var3: "{{ item.1.mac_address[0] }}"
+      loop: "{{ vm_info.results | subelements('virtual_machines') }}"
             
     - name: Changing network adapter to {{ vlan }}
       community.vmware.vmware_guest_network:
