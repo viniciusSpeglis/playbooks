@@ -31,7 +31,6 @@
 
     - name: Changing network adapter
       community.vmware.vmware_guest_network:
-        datacenter: "{{ 'daevcsa01.eur.ad.sag' if datacenter == 'dae' else 'vadvc01.eur.ad.sag' if datacenter == 'vad' }}"
         cluster: "{{ vm_info.results[loop.index].virtual_machines[0].cluster }}"
         validate_certs: no
         name: "{{ item }}"
