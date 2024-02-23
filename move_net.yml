@@ -13,10 +13,12 @@
     
     - name: Removing current network card 
       community.vmware.vmware_guest_network:
+        #datacenter: "{{ 'daevcsa01.eur.ad.sag' if datacenter == 'dae' else 'vadvc01.eur.ad.sag' if datacenter == 'vad' }}"
         cluster: "{{ item.1.cluster }}"
         validate_certs: no
         name: "{{ item.1.guest_name }}"
         mac_address: "{{ item.1.mac_address[0] }}"
+        network_name: "{{ 'VLAN 1000' if vlan == 'SAG DMZ -> IntegrationCo DMZ' else 'VM Network' if vlan == 'SAG Internal -> IntegrationCo Internal' }}"
         state: absent
       with_items:
         - "{{ vm_info.results | subelements('virtual_machines') }}"
