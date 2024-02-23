@@ -14,10 +14,10 @@
 
     - name: Changing network adapter
       community.vmware.vmware_guest_network:
-        cluster: "{{ vm_info.results[ansible_loop.index].virtual_machines[0].cluster }}"
+        cluster: "{{ vm_info.results[item_vm.index].virtual_machines[0].cluster }}"
         validate_certs: no
         name: "{{ item }}"
-        mac_address: "{{ vm_info.results[ansible_loop.index].virtual_machines[0].mac_address[0] }}"
+        mac_address: "{{ vm_info.results[item_vm.index].virtual_machines[0].mac_address[0] }}"
         network_name: 'VLAN 1000'
         state: present
       loop: "{{ server.split(',') }}"
