@@ -1,0 +1,51 @@
+---
+- name: Check VMware VM Configuration
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Gather VM Information
+      community.vmware.vmware_vm_info:
+        validate_certs: no
+        vm_name: "{{ item }}"
+      register: vm_info
+      loop: "{{ server.split(',') }}"
+      tags:
+        - opa
+
+    - name: Powering off "{{ item }}"
+      community.vmware.vmware_guest_powerstate:
+        validate_certs: no
+        name: "{{ item }}"
+        state: powered-off
+      loop: "{{ server.split(',') }}"
+      
+    - name: Custom tags
+      community.vmware.vmware_guest_custom_attributes:
+        validate_certs: no  
+        name: "{{ item }}"
+        attributes:
+          - name: Company
+            value: IntegrationCo
+      loop: "{{ server.split(',') }}"
+
+    - name: Changing network adapter
+      community.vmware.vmware_guest_network:
+        cluster: "{{ vm_info.results[loop.index].virtual_machines[0].cluster }}"
+        validate_certs: no
+        name: "{{ item }}"
+        mac_address: "{{ vm_info.results[loop.index].virtual_machines[0].mac_address[0] }}"
+        network_name: 'VLAN 1000'
+        state: present
+      loop: "{{ server.split(',') }}"
+      tags:
+        - opa2
+
+
+    - name: Powering on "{{ item }}"
+      community.vmware.vmware_guest_powerstate:
+        validate_certs: no
+        name: "{{ item }}"
+        state: powered-on
+      loop: "{{ server.split(',') }}"
+      delegate_to: localhost
