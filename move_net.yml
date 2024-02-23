@@ -14,7 +14,7 @@
 
     - name: Changing network adapter
       community.vmware.vmware_guest_network:
-        cluster: "{{ item.1.cluster }}"
+        cluster: "{{ item.1.cluster[0] }}"
         validate_certs: no
         name: "{{ item }}"
         mac_address: "{{ item.1.mac_address[0] }}"
