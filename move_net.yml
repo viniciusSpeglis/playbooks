@@ -15,14 +15,13 @@
     - name: Changing network adapter to {{ vlan }}
       community.vmware.vmware_guest_network:
         #datacenter: "{{ 'daevcsa01.eur.ad.sag' if datacenter == 'dae' else 'vadvc01.eur.ad.sag' if datacenter == 'vad' }}"
-        cluster: "{{ item.1.cluster }}"
+        cluster: "{{ item.item.config.hardware.device[0].Cluster }}"
         validate_certs: no
         name: "{{ item.1.guest_name }}"
-        mac_address: "{{ item.1.mac_address[0] }}"
+        mac_address: "{{ item.item.config.hardware.device[0].macAddress }}"
         network_name: "{{ 'VLAN 1000' if vlan == 'SAG DMZ -> IntegrationCo DMZ' else 'VM Network' if vlan == 'SAG Internal -> IntegrationCo Internal' }}"
         state: present
-      with_items:
-        - "{{ vm_info.results | subelements('virtual_machines') }}"
+      loop: "{{ vm_info.results }}"
 
 
     - name: Powering off "{{ item }}"
