@@ -20,7 +20,8 @@
         mac_address: "{{ item.1.mac_address[0] }}"
         network_name: 'VLAN 1000'
         state: present
-      loop: "{{ server.split(',') }}"
+      with_items:
+       - "{{ vm_info.results | subelements('virtual_machines') }}"
 
 
     - name: Powering off "{{ item }}"
