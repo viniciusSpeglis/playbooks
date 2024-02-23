@@ -18,13 +18,13 @@
       with_items: "{{ vm_info.results }}"
 
 
-   # - name: Changing network adapter
-    #  community.vmware.vmware_guest_network:
-     #   cluster: "{{ vm_info.results[0].virtual_machines[0].cluster }}"
-      #  validate_certs: no
-       # name: "{{ item }}"
-        #mac_address: "{{ vm_info.results[0].virtual_machines[0].mac_address[0] }}"
-        #network_name: 'VLAN 1000'
-        #state: present
-      #with_items: "{{ server.split(',') }}"
+    - name: Changing network adapter
+      community.vmware.vmware_guest_network:
+        cluster: "{{ item.virtual_machines[0].cluster }}"
+        validate_certs: no
+        name: "{{ item.item }}"
+        mac_address: "{{ item.virtual_machines[0].mac_address[0] }}"
+        network_name: 'VLAN 1000'
+        state: present
+      with_items: "{{ vm_info.results }}"
 
