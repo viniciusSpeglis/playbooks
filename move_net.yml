@@ -18,7 +18,17 @@
           var2: "{{ item.1.guest_name }}"
           var3: "{{ item.1.mac_address[0] }}"
       loop: "{{ vm_info.results | subelements('virtual_machines') }}"
-            
+    
+    - name: Removing current network card 
+      community.vmware.vmware_guest_network:
+        cluster: "{{ item.1.cluster }}"
+        validate_certs: no
+        name: "{{ item.1.guest_name }}"
+        mac_address: "{{ item.1.mac_address[0] }}"
+        state: absent
+      with_items:
+        - "{{ vm_info.results | subelements('virtual_machines') }}"
+        
     - name: Changing network adapter to {{ vlan }}
       community.vmware.vmware_guest_network:
         #datacenter: "{{ 'daevcsa01.eur.ad.sag' if datacenter == 'dae' else 'vadvc01.eur.ad.sag' if datacenter == 'vad' }}"
