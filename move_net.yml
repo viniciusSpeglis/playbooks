@@ -11,16 +11,26 @@
       register: vm_info
       loop: "{{ server.split(',') }}"
 
-
+    - name: Debug vars
+      debug:  
+          msg:
+            var1: "{{ item.1.cluster }}"
+            var2: "{{ item.1.guest_name }}"
+            var3: "{{ item.1.mac_address[0] }}"
+          with_items:
+            - "{{ vm_info.results | subelements('virtual_machines') }}"
+            
     - name: Changing network adapter to {{ vlan }}
       community.vmware.vmware_guest_network:
-        cluster: "{{ item.item.cluster }}"
+        #datacenter: "{{ 'daevcsa01.eur.ad.sag' if datacenter == 'dae' else 'vadvc01.eur.ad.sag' if datacenter == 'vad' }}"
+        cluster: "{{ item.1.cluster }}"
         validate_certs: no
-        name: "{{ item.item.guest_name }}"
-        mac_address: "{{ item.item.mac_address[0] }}"
+        name: "{{ item.1.guest_name }}"
+        mac_address: "{{ item.1.mac_address[0] }}"
         network_name: "{{ 'VLAN 1000' if vlan == 'SAG DMZ -> IntegrationCo DMZ' else 'VM Network' if vlan == 'SAG Internal -> IntegrationCo Internal' }}"
         state: present
-      loop: "{{ vm_info.results }}"
+      with_items:
+        - "{{ vm_info.results | subelements('virtual_machines') }}"
 
 
     - name: Powering off "{{ item }}"
