@@ -10,6 +10,8 @@
         vm_name: "{{ item }}"
       register: vm_info
       loop: "{{ server.split(',') }}"
+      tags:
+        - opa
 
     - name: Powering off "{{ item }}"
       community.vmware.vmware_guest_powerstate:
@@ -37,6 +39,8 @@
         network_name: 'VLAN 1000'
         state: present
       loop: "{{ server.split(',') }}"
+      tags:
+        - opa2
 
 
     - name: Powering on "{{ item }}"
