@@ -16,7 +16,7 @@
       debug:
         var: item.virtual_machines[0].mac_address[0]
       with_items: "{{ vm_info.results }}"
-      tags:
+
 
    # - name: Changing network adapter
     #  community.vmware.vmware_guest_network:
