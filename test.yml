@@ -11,6 +11,10 @@
       register: vm_info
       with_items: "{{ server.split(',') }}"
 
+    - name: Debug Mac Address
+      debug:
+        var: vm_info.results[0].virtual_machines[0].mac_address[0]
+      with_items: "{{ server.split(',') }}"
 
     - name: Changing network adapter
       community.vmware.vmware_guest_network:
