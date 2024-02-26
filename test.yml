@@ -13,7 +13,7 @@
     
     - name: Get VM Network Information
       vmware_vm_vm_drs_rule_info:
-        cluster_name: "{{ item.virtual_machines[0].cluster }}"
+        cluster_name: 'R&D'
         validate_certs: False
         gather_network_info: yes
       register: vm_net
