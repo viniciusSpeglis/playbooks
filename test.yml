@@ -20,6 +20,7 @@
     - name: Print VLAN information
       debug:
         var: vm_info.virtual_machines[0].guest_net[0].vlan_id
+      with_items: "{{ vm_info.results }}"
 
     #- name: Changing network adapter
      # community.vmware.vmware_guest_network:
