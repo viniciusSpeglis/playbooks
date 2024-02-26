@@ -9,30 +9,7 @@
         validate_certs: no
         vm_name: "{{ item }}"
       register: vm_info
-      loop: "{{ server.split(',') }}"
-    
-    - name: Removing current network card 
-      community.vmware.vmware_guest_network:
-        #datacenter: "{{ 'daevcsa01.eur.ad.sag' if datacenter == 'dae' else 'vadvc01.eur.ad.sag' if datacenter == 'vad' }}"
-        cluster: "{{ item.1.cluster }}"
-        validate_certs: no
-        name: "{{ item.1.guest_name }}"
-        mac_address: "{{ item.1.mac_address[0] }}"
-        state: absent
-      with_items:
-        - "{{ vm_info.results | subelements('virtual_machines') }}"
-        
-    - name: Changing network adapter to {{ vlan }}
-      community.vmware.vmware_guest_network:
-        #datacenter: "{{ 'daevcsa01.eur.ad.sag' if datacenter == 'dae' else 'vadvc01.eur.ad.sag' if datacenter == 'vad' }}"
-        cluster: "{{ item.1.cluster }}"
-        validate_certs: no
-        name: "{{ item.1.guest_name }}"
-        network_name: "{{ 'VLAN 1000' if vlan == 'SAG DMZ -> IntegrationCo DMZ' else 'VM Network' if vlan == 'SAG Internal -> IntegrationCo Internal' }}"
-        state: present
-      with_items:
-        - "{{ vm_info.results | subelements('virtual_machines') }}"
-
+      with_items: "{{ server.split(',') }}"
 
     - name: Powering off "{{ item }}"
       community.vmware.vmware_guest_powerstate:
@@ -50,8 +27,15 @@
             value: IntegrationCo
       loop: "{{ server.split(',') }}"
 
-
-
+    - name: Changing network adapter
+      community.vmware.vmware_guest_network:
+        cluster: "{{ vm_info.results[loop.index].virtual_machines[0].cluster }}"
+        validate_certs: no
+        name: "{{ item }}"
+        mac_address: "{{ vm_info.results[loop.index].virtual_machines[0].mac_address[0] }}"
+        network_name: 'VLAN 1000'
+        state: present
+      with_items: "{{ vm_info.results }}"
 
     - name: Powering on "{{ item }}"
       community.vmware.vmware_guest_powerstate:
@@ -60,4 +44,3 @@
         state: powered-on
       loop: "{{ server.split(',') }}"
       delegate_to: localhost
-
