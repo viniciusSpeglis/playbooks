@@ -29,10 +29,10 @@
 
     - name: Changing network adapter
       community.vmware.vmware_guest_network:
-        cluster: "{{ vm_info.results[loop.index].virtual_machines[0].cluster }}"
+        cluster: "{{ item.virtual_machines[0].cluster }}"
         validate_certs: no
-        name: "{{ item }}"
-        mac_address: "{{ vm_info.results[loop.index].virtual_machines[0].mac_address[0] }}"
+        name: "{{ item.item }}"
+        mac_address: "{{ item.virtual_machines[0].mac_address[0] }}"
         network_name: "{{ 'VLAN 1000' if vlan == 'SAG DMZ -> IntegrationCo DMZ' else 'VM Network' if vlan == 'SAG Internal -> IntegrationCo Internal' }}"
         state: present
       with_items: "{{ vm_info.results }}"
