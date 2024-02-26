@@ -12,7 +12,7 @@
       with_items: "{{ server.split(',') }}"
     
     - name: Get VM Network Information
-      vmware_vm_vm_drs_rule_info:
+      community.vmware.vmware_drs_rule_info:
         cluster_name: 'R&D'
         validate_certs: False
         gather_network_info: yes
