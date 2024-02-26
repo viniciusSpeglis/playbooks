@@ -10,7 +10,13 @@
         vm_name: "{{ item }}"
       register: vm_info
       with_items: "{{ server.split(',') }}"
-
+    
+    - name: Get VM Network Information
+      vmware_vm_vm_drs_rule_info:
+        cluster_name: "{{ item.virtual_machines[0].cluster }}"
+        validate_certs: False
+        gather_network_info: yes
+      register: vm_net
 
     - name: Debug Mac Address
       debug:
@@ -19,8 +25,7 @@
     
     - name: Print VLAN information
       debug:
-        var: vm_info.virtual_machines[0].guest_net[0].vlan_id
-      with_items: "{{ vm_info.results }}"
+        var: vm_net.networks
 
     #- name: Changing network adapter
      # community.vmware.vmware_guest_network:
