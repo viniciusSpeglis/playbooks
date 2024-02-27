@@ -1,0 +1,16 @@
+---
+- name: Retrieve VLAN ID of a Virtual Machine
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Get DVS information for the virtual machine
+      vmware_vm_vm_dvs_info:
+        cluster_name: 'R&D'
+        vm_name: "vinitestsuse01"
+        validate_certs: no
+      register: dvs_info
+
+    - name: Display VLAN ID
+      debug:
+        msg: "VLAN ID for {{ dvs_info.vm_name }} is {{ dvs_info.dvs_port_info.vlan_id }}"
