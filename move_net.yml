@@ -1,42 +1,51 @@
 ---
-- name: Check VMware VM Configuration
-  hosts: localhost
-  gather_facts: false
+block:
+  - name: Check VMware VM Configuration
+    hosts: localhost
+    gather_facts: false
 
-  tasks:
-    - name: Gather VM Information
-      community.vmware.vmware_vm_info:
-        validate_certs: no
-        vm_name: "{{ item }}"
-      register: vm_info
-      with_items: "{{ server.split(',') }}"
-
-    - name: Powering off "{{ item }}"
-      community.vmware.vmware_guest_powerstate:
-        validate_certs: no
-        name: "{{ item }}"
-        state: powered-off
-      loop: "{{ server.split(',') }}"
-      
-    - name: Custom tags
-      community.vmware.vmware_guest_custom_attributes:
-        validate_certs: no  
-        name: "{{ item }}"
-        attributes:
-          - name: Company
-            value: IntegrationCo
-      loop: "{{ server.split(',') }}"
-
-    - name: Changing network adapter
-      community.vmware.vmware_guest_network:
-        cluster: "{{ item.virtual_machines[0].cluster }}"
-        validate_certs: no
-        name: "{{ item.item }}"
-        mac_address: "{{ item.virtual_machines[0].mac_address[0] }}"
-        network_name: "{{ 'VLAN 1000' if vlan == 'SAG DMZ -> IntegrationCo DMZ' else 'VM Network' if vlan == 'SAG Internal -> IntegrationCo Internal' }}"
-        state: present
-      with_items: "{{ vm_info.results }}"
-
+    tasks:
+      - name: Gather VM Information
+        community.vmware.vmware_vm_info:
+          validate_certs: no
+          vm_name: "{{ item }}"
+        register: vm_info
+        with_items: "{{ server.split(',') }}"
+  
+      - name: Powering off "{{ item }}"
+        community.vmware.vmware_guest_powerstate:
+          validate_certs: no
+          name: "{{ item }}"
+          state: powered-off
+        loop: "{{ server.split(',') }}"
+        
+      - name: Custom tags
+        community.vmware.vmware_guest_custom_attributes:
+          validate_certs: no  
+          name: "{{ item }}"
+          attributes:
+            - name: Company
+              value: IntegrationCo
+        loop: "{{ server.split(',') }}"
+  
+      - name: Changing network adapter
+        community.vmware.vmware_guest_network:
+          cluster: "{{ item.virtual_machines[0].cluster }}"
+          validate_certs: no
+          name: "{{ item.item }}"
+          mac_address: "{{ item.virtual_machines[0].mac_address[0] }}"
+          network_name: "{{ 'VLAN 1000' if vlan == 'SAG DMZ -> IntegrationCo DMZ' else 'VM Network' if vlan == 'SAG Internal -> IntegrationCo Internal' }}"
+          state: present
+        with_items: "{{ vm_info.results }}"
+  
+      - name: Powering on "{{ item }}"
+        community.vmware.vmware_guest_powerstate:
+          validate_certs: no
+          name: "{{ item }}"
+          state: powered-on
+        loop: "{{ server.split(',') }}"
+        delegate_to: localhost
+Rescue:
     - name: Powering on "{{ item }}"
       community.vmware.vmware_guest_powerstate:
         validate_certs: no
